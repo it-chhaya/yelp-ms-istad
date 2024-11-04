@@ -1,0 +1,68 @@
+services:
+  postgres:
+    container_name: "yelp-postgres"
+    image: "debezium/postgres:16-alpine"
+    ports:
+      - "5168:5432"
+    volumes:
+      - "./config/postgres/postgresql.conf:/usr/share/postgresql/postgresql.conf"
+      - "./config/postgres/postgres_init.sql:/docker-entrypoint-initdb.d/postgres_init.sql"
+      - "postgres:/var/lib/postgresql/data"
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin2024
+    healthcheck:
+     test: [ "CMD", "pg_isready", "-U", "admin", "-d", "admin" ]
+     interval: 20s  # Check every 20 seconds
+     timeout: 3s     # Wait up to 3 seconds for successful check
+     retries: 5     # Retry up to 5 times before marking unhealthy
+    networks:
+      - yelp-network
+  postgres-oauth2:
+    container_name: "yelp-postgres-oauth2"
+    image: "debezium/postgres:16-alpine"
+    ports:
+      - "5169:5432"
+    volumes:
+      - "postgres-oauth2:/var/lib/postgresql/data"
+    environment:
+      - POSTGRES_USER=oauth2
+      - POSTGRES_PASSWORD=oauth2
+      - POSTGRES_DB=oauth2
+    healthcheck:
+     test: [ "CMD", "pg_isready", "-U", "oauth2", "-d", "oauth2" ]
+     interval: 20s  # Check every 20 seconds
+     timeout: 3s     # Wait up to 3 seconds for successful check
+     retries: 5     # Retry up to 5 times before marking unhealthy
+    networks:
+      - yelp-network
+  mongodb:
+    image: "mongo:7.0.12-rc1-jammy"
+    container_name: "yelp-mongodb"
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=admin2024
+    healthcheck:
+      test: echo 'mongosh --authenticationDatabase admin --host localhost -u admin -p admin2024 admin --quiet | grep -q 1
+      interval: 10s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+    volumes:
+      - mongodb-yelp-vol:/data/db/
+      - mongodb-yelp-log-vol:/var/log/mongodb/
+    networks:
+      - yelp-network
+
+networks:
+  yelp-network:
+    driver: bridge
+    name: yelp-network
+
+volumes:
+  postgres:
+  postgres-oauth2:
+  mongodb-yelp-vol:
+  mongodb-yelp-log-vol:

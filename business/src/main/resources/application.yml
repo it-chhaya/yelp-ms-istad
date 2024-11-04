@@ -1,0 +1,21 @@
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://127.0.0.1:8761/eureka/
+
+
+spring:
+  application:
+    name: business
+  profiles:
+    active: dev
+  config:
+    import: "configserver:http://localhost:8888"
+server:
+  port: 8080
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
