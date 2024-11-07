@@ -1,4 +1,4 @@
-package kh.edu.cstad.idenity.jpa;
+package kh.edu.cstad.idenity.config.jpa;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

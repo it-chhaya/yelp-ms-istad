@@ -2,7 +2,7 @@ package kh.edu.cstad.idenity.domain;
 
 
 import jakarta.persistence.*;
-import kh.edu.cstad.idenity.jpa.Auditable;
+import kh.edu.cstad.idenity.config.jpa.Auditable;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

@@ -1,0 +1,33 @@
+spring:
+  application:
+    name: gateway-server
+  config:
+    import: "configserver:"
+  cloud:
+    config:
+      uri: "http://localhost:8888"
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+  profiles:
+    active: dev
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  health:
+    readiness-state:
+      enabled: true
+    liveness-state:
+      enabled: true
+  endpoint:
+    gateway:
+      enabled: true
+    health:
+      probes:
+        enabled: true
+      show-details: always

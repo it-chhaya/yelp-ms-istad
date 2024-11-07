@@ -13,5 +13,3 @@ spring:
           uri: https://github.com/it-chhaya/yelp-ms-istad-config.git
           default-label: main
           search-paths: "/service/**"
-
-

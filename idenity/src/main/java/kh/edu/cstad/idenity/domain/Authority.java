@@ -1,6 +1,5 @@
 package kh.edu.cstad.idenity.domain;
 
-import co.istad.identity.domain.UserAuthority;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;

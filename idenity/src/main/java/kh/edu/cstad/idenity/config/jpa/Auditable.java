@@ -1,6 +1,9 @@
-package kh.edu.cstad.idenity.jpa;
+package kh.edu.cstad.idenity.config.jpa;
 
-import jakarta.persistence.*;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -18,9 +21,6 @@ import java.time.LocalDateTime;
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 public abstract class Auditable<T> {
-
-    @Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
-    protected Boolean isDeleted = false;
 
     @CreatedBy
     protected T createdBy;
