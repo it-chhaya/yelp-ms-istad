@@ -1,10 +1,21 @@
 spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://127.0.0.1:9090
   application:
     name: identity
   config:
     import: "configserver:"
   cloud:
     config:
-      uri: "http://localhost:8888"
+      uri: "http://127.0.0.1:8888"
   profiles:
     active: dev
+
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG

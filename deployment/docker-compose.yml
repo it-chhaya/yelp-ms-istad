@@ -11,6 +11,7 @@ services:
     environment:
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=admin2024
+      - TZ=Asia/Bangkork
     healthcheck:
      test: [ "CMD", "pg_isready", "-U", "admin", "-d", "admin" ]
      interval: 20s  # Check every 20 seconds
@@ -29,6 +30,7 @@ services:
       - POSTGRES_USER=oauth2
       - POSTGRES_PASSWORD=oauth2
       - POSTGRES_DB=oauth2
+      - TZ=Asia/Bangkork
     healthcheck:
      test: [ "CMD", "pg_isready", "-U", "oauth2", "-d", "oauth2" ]
      interval: 20s  # Check every 20 seconds

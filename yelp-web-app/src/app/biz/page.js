@@ -1,7 +1,8 @@
-export default function page() {
+import Biz from "@/app/biz/local";
+import Local from "@/app/biz/local";
+
+export default function Page() {
     return (
-        <>
-            <h1>Business Page</h1>
-        </>
+        <Local/>
     )
 }

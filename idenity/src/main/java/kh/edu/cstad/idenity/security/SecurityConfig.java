@@ -73,7 +73,7 @@ public class SecurityConfig {
         http
                 .exceptionHandling(ex -> ex
                         .defaultAuthenticationEntryPointFor(
-                                new LoginUrlAuthenticationEntryPoint("/oauth2/login"),
+                                new LoginUrlAuthenticationEntryPoint("/login"),
                                 new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
                         )
                 );
@@ -88,20 +88,21 @@ public class SecurityConfig {
     SecurityFilterChain configureHttpSecurity(HttpSecurity http) throws Exception {
 
         http
-                /*.authorizeHttpRequests(auth -> auth
+                .authorizeHttpRequests(auth -> auth
                         .anyRequest()
                         .permitAll()
-                )*/
+                )
 
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .jwt(Customizer.withDefaults())
                 )
-                .formLogin(form -> form
+                .formLogin(Customizer.withDefaults())
+                /*.formLogin(form -> form
                         .loginPage("/oauth2/login")
                         .usernameParameter("gp_account")
                         .passwordParameter("gp_password")
-                )
-                .cors(Customizer.withDefaults())
+                )*/
+                .cors(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable);
 
         return http.build();

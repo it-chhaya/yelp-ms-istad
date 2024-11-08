@@ -28,6 +28,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         CustomUserDetails customUserDetails = new CustomUserDetails();
         customUserDetails.setUser(user);
 
+        System.out.println(customUserDetails.getUsername());
+
         return customUserDetails;
     }
 }

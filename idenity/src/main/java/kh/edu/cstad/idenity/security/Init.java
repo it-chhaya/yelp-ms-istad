@@ -71,7 +71,7 @@ public class Init {
             User adminUser = new User();
             adminUser.setUuid(UUID.randomUUID().toString());
             adminUser.setUsername("admin");
-            adminUser.setEmail("admin@gp.com");
+            adminUser.setEmail("admin@yelp.com");
             adminUser.setPassword(passwordEncoder.encode("qwerqwer"));
             adminUser.setFamilyName("Chan");
             adminUser.setGivenName("Chhaya");
@@ -114,39 +114,32 @@ public class Init {
 
         TokenSettings tokenSettings = TokenSettings.builder()
                 .accessTokenFormat(OAuth2TokenFormat.SELF_CONTAINED)
-                .accessTokenTimeToLive(Duration.ofDays(3))
-                .reuseRefreshTokens(false)
-                .refreshTokenTimeToLive(Duration.ofDays(5))
+                .accessTokenTimeToLive(Duration.ofMinutes(1))
                 .build();
 
         ClientSettings clientSettings = ClientSettings.builder()
                 .requireProofKey(true)
-                .requireAuthorizationConsent(true)
+                .requireAuthorizationConsent(false)
                 .build();
 
-        var web = RegisteredClient.withId("gpweb")
-                .clientId("gpweb")
+        var web = RegisteredClient.withId(UUID.randomUUID().toString())
+                .clientId("yelp")
                 .clientSecret(passwordEncoder.encode("qwerqwer")) // store in secret manager
                 .scopes(scopes -> {
                     scopes.add(OidcScopes.OPENID);
                     scopes.add(OidcScopes.PROFILE);
                     scopes.add(OidcScopes.EMAIL);
-                    scopes.add("offline_access");
                 })
                 .redirectUris(uris -> {
-                    /*uris.add("http://localhost:8080/login/oauth2/code/gpweb");
-                    uris.add("http://localhost:16800/login/oauth2/code/gpweb");
-                    uris.add("http://localhost:16600/login/oauth2/code/gpweb");*/
-                    uris.add("http://localhost:8080");
-                    uris.add("http://localhost:16800");
-                    uris.add("http://localhost:16600");
+                    uris.add("http://127.0.0.1:9090/login/oauth2/code/yelp");
+                    uris.add("http://127.0.0.1:8168/login/oauth2/code/yelp");
                 })
                 .postLogoutRedirectUris(uris -> {
-                    uris.add("http://localhost:8080");
-                    uris.add("http://localhost:16800");
-                    uris.add("http://localhost:16600");
+                    uris.add("http://127.0.0.1:8168");
                 })
-                .clientAuthenticationMethod(ClientAuthenticationMethod.NONE) //TODO: grant_type:client_credentials, client_id & client_secret, redirect_uri
+                .clientAuthenticationMethods(method -> {
+                    method.add(ClientAuthenticationMethod.CLIENT_SECRET_BASIC);
+                }) //TODO: grant_type:client_credentials, client_id & client_secret, redirect_uri
                 .authorizationGrantTypes(grantTypes -> {
                     grantTypes.add(AuthorizationGrantType.AUTHORIZATION_CODE);
                     grantTypes.add(AuthorizationGrantType.REFRESH_TOKEN);
@@ -155,8 +148,7 @@ public class Init {
                 .tokenSettings(tokenSettings)
                 .build();
 
-        RegisteredClient registeredClient = jpaRegisteredClientRepository.findByClientId("gpweb");
-        log.info("Registered client: {}", registeredClient);
+        RegisteredClient registeredClient = jpaRegisteredClientRepository.findByClientId("yelp");
 
         if (registeredClient == null) {
             jpaRegisteredClientRepository.save(web);

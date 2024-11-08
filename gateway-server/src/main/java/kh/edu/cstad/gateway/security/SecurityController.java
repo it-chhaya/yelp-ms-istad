@@ -18,15 +18,12 @@ public class SecurityController {
     @GetMapping("/profile")
     UserProfile secured(@AuthenticationPrincipal Authentication auth) {
         OAuth2AuthenticationToken oauth2 = (OAuth2AuthenticationToken) auth;
-        DefaultOidcUser oidcUser = (DefaultOidcUser) oauth2.getPrincipal();
-        System.out.println(oidcUser.getAccessTokenHash());
+        DefaultOidcUser oidcUser = (DefaultOidcUser) oauth2.getCredentials();
+        System.out.println(oidcUser.getAttributes());
         return new UserProfile(oidcUser.getName(),
-                oidcUser.getUserInfo().getClaimAsString("uuid"), oidcUser.getIdToken().getClaimAsString("reksmey1"));
-//        return new UserProfile(
-//                oAuth2User.getName(),
-//                oAuth2User.getAttribute("preferred_username"),
-//                oAuth2User.getAttribute("preferred_username")
-//        );
+                oidcUser.getUserInfo().getClaimAsString("uuid"),
+                oidcUser.getIdToken().getClaimAsString("reksmey1")
+        );
     }
 
 }
