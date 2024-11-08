@@ -1,18 +1,89 @@
+client-security-matchers: >
+  /login/**,
+  /oauth2/**,
+  /logout/**,
+  /en/**,
+  /auth/**,
+  /business/**,
+  /profile/**
+
+client-permit-matchers: >
+  /login/**,
+  /oauth2/**,
+  /en/**,
+  /auth/**,
+  /contactSupport/**,
+  /error/**,
+  /actuator/**,
+  /info/**,
+  /health/**,
+  /prometheus/**,
+  /business/**,
+  /profile/**
+
 spring:
+  security:
+    oauth2:
+      client:
+        provider:
+          yelp:
+            issuer-uri: http://127.0.0.1:9090
+        registration:
+          yelp:
+            provider: yelp
+            client-id: yelp
+            client-secret: qwerqwer
+            authorization-grant-type:
+              - authorization_code
+            scope: openid, profile, email
+            redirect-uri: http://127.0.0.1:8168/login/oauth2/code/yelp
   application:
     name: gateway-server
   config:
     import: "configserver:"
   cloud:
     config:
-      uri: "http://localhost:8888"
+      uri: "http://127.0.0.1:8888"
     gateway:
       discovery:
         locator:
-          enabled: true
+          enabled: false
           lower-case-service-id: true
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin Access-Control-Request-Headers
+        - SaveSession
+      routes:
+
+        - id: business # Register Business Service
+          uri: http://127.0.0.1:8080
+          predicates:
+            - Path=/business/**
+          filters:
+            - TokenRelay=
+            - RewritePath=/business/(?<segment>.*),/$\{segment}
+
+        - id: identity # Register Identity Service
+          uri: http://127.0.0.1:9090
+          predicates:
+            - Path=/identity/**
+          filters:
+            - TokenRelay=
+            - RewritePath=/identity/(?<segment>.*),/$\{segment}
+
+        - id: yelp-web-app # Register Frontend (NextJS)
+          uri: http://127.0.0.1:3000
+          predicates:
+            - Path=/**
+
   profiles:
     active: dev
+
+logging:
+  level:
+    root: INFO
+    org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator: INFO
+    org.springframework.cloud.gateway: TRACE
+    org.springframework.web.server.adapter.HttpWebHandlerAdapter: TRACE
 
 management:
   endpoints:
