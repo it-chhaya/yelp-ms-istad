@@ -1,15 +1,23 @@
-import axios from "axios";
-export default async function Local() {
+'use client'
 
-    let data = await axios(`http://127.0.0.1:8168/business/api/v1/categories`)
-    const {res} = data;
-    console.log(res)
+import {useEffect, useState} from "react";
+
+export default function Local(data) {
+
+    const [category, setCategory] = useState({})
+
+    useEffect(() => {
+        const onLoad = async () => {
+            return await data()
+        };
+        onLoad().then(json => setCategory(json));
+    }, [category, data])
 
     return (
         <div>
-            <h1>Business Page</h1>
+            <h1>Category Page</h1>
             <hr/>
-            {/*<h1>{category.name}</h1>*/}
+            <h1>{category.name}</h1>
         </div>
     )
 }

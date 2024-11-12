@@ -17,8 +17,13 @@ import org.springframework.security.web.server.authentication.logout.ServerLogou
 import org.springframework.security.web.server.util.matcher.OrServerWebExchangeMatcher;
 import org.springframework.security.web.server.util.matcher.PathPatternParserServerWebExchangeMatcher;
 import org.springframework.security.web.server.util.matcher.ServerWebExchangeMatcher;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.reactive.CorsConfigurationSource;
+import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 
 import java.net.URI;
+import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Stream;
 
 @Configuration
@@ -73,5 +78,4 @@ public class SecurityConfig {
 
         return redirectServerLogoutSuccessHandler;
     }
-
 }

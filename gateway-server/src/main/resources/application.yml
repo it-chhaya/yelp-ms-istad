@@ -5,7 +5,8 @@ client-security-matchers: >
   /en/**,
   /auth/**,
   /business/**,
-  /profile/**
+  /profile/**,
+  /biz/**
 
 client-permit-matchers: >
   /login/**,
@@ -17,9 +18,7 @@ client-permit-matchers: >
   /actuator/**,
   /info/**,
   /health/**,
-  /prometheus/**,
-  /business/**,
-  /profile/**
+  /prometheus/**
 
 spring:
   security:
@@ -52,6 +51,7 @@ spring:
       default-filters:
         - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin Access-Control-Request-Headers
         - SaveSession
+        - TokenRelay=
       routes:
 
         - id: business # Register Business Service
@@ -74,6 +74,9 @@ spring:
           uri: http://127.0.0.1:3000
           predicates:
             - Path=/**
+          filters:
+            - TokenRelay=
+
 
   profiles:
     active: dev

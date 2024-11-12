@@ -1,8 +1,11 @@
-import Biz from "@/app/biz/local";
-import Local from "@/app/biz/local";
+// app/protected/page.tsx
+import { serverFetch } from '@/lib/server-fetch'
+import { redirect } from 'next/navigation'
 
-export default function Page() {
+export default async function Page() {
     return (
-        <Local/>
+        <AuthenticatedDataWrapper>
+            <ProtectedContent />
+        </AuthenticatedDataWrapper>
     )
 }
