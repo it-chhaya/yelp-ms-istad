@@ -1,0 +1,56 @@
+spring:
+  kafka:
+    bootstrap-servers: localhost:29092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      key-deserializer: org.apache.kafka.common.serialization.StringSerializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+  application:
+    name: notification
+  cloud:
+    stream:
+#      kafka:
+#        streams:
+#          binder:
+#            brokers: localhost:29092
+      bindings:
+        notificationProcessor-in-0:
+          destination: notifications
+          content-type: application/json
+        notificationProcessor-out-0:
+          destination: processed-notifications
+          content-type: application/json
+
+
+    #    for webflux
+
+#  cloud:
+#    function:
+#      definition: processNotification
+#    #    function:
+##      definition: consumerBinding;processorBinding;producerBinding
+#    stream:
+#      kafka:
+#        binder:
+#          brokers: 127.0.0.1:29092
+#          configuration:
+#            auto.offset.reset:
+#      bindings:
+#        processNotification-in-0:
+#          destination: notifications
+#          group: notification-group
+#          content-type: application/json
+
+#      bindings:
+#        producerBinding-out-0:
+#          destination: processor-topic
+#        processorBinding-in-0:
+#          destination: processor-topic
+#        processorBinding-out-0:
+#          destination: consumer-topic
+#        consumerBinding-in-0:
+#          destination: consumer-topic
