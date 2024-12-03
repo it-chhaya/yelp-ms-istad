@@ -1,6 +1,6 @@
 spring:
   kafka:
-    bootstrap-servers: localhost:29092
+    bootstrap-servers: localhost:9092
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
@@ -13,10 +13,6 @@ spring:
     name: notification
   cloud:
     stream:
-#      kafka:
-#        streams:
-#          binder:
-#            brokers: localhost:29092
       bindings:
         notificationProcessor-in-0:
           destination: notifications
